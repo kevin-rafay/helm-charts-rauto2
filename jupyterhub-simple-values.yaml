@@ -1,0 +1,37 @@
+# Simplified JupyterHub configuration for namespace: phani-1
+
+hub:
+  config:
+    JupyterHub:
+      admin_access: true
+      authenticator_class: dummy  # Allows login with any username/password
+  db:
+    type: sqlite-pvc
+    pvc:
+      storage: 1Gi
+  image:
+    name: quay.io/jupyterhub/k8s-hub
+    tag: "4.3.2"
+
+proxy:
+  secretToken: "3f3e6e879008985169a5323e061619478e5f8f267759600e12d4787d56682707" # Required: Generate with 'openssl rand -hex 32'
+  service:
+    type: NodePort # Change to NodePort if you don't have a Cloud Load Balancer
+
+singleuser:
+  image:
+    name: quay.io/jupyterhub/k8s-singleuser-sample
+    tag: "4.3.2"
+  memory:
+    guarantee: 1G
+  storage:
+    capacity: 10Gi
+    type: dynamic
+
+scheduling:
+  userScheduler:
+    enabled: true
+
+cull:
+  enabled: true
+  timeout: 3600 # Terminate idle pods after 1 hour
